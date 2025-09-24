@@ -10,11 +10,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 //entiteettiluokka; @Entity annotaation avulla luodaan olio automaattisesti tietokantaan
 //@Id + @GeneratedValue annotaatioiden avulla tietokanta generoi automaattiset id-arvot eikä niitä siksi konstruktoreissa käytetä
 
 @Entity
+@Table(name ="kayttajat") //hibernate ei voi luoda user-taulua
 public class User {
 
     @Id

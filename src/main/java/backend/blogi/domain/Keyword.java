@@ -4,6 +4,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 //entiteettiluokka; @Entity annotaation avulla luodaan olio automaattisesti tietokantaan
 //@Id + @GeneratedValue annotaatioiden avulla tietokanta generoi automaattiset id-arvot eikä niitä siksi konstruktoreissa käytetä
@@ -12,6 +15,7 @@ import jakarta.persistence.Id;
 //tämä luokka tulee siis mahdollisesti olemaan manyToMany luokka
 
 @Entity
+@Table(name = "avainsanat") //yhteinäisyyden säilymiseksi vaihdetaan taulut suomenkieliksi
 public class Keyword {
 
     @Id
@@ -19,6 +23,10 @@ public class Keyword {
     private Long keywordId;
 
     private String strKeyword;
+
+    @ManyToOne
+    @JoinColumn(name = "postId")
+    private Post postaus;
 
     public Keyword () {
 
@@ -42,6 +50,14 @@ public class Keyword {
 
     public void setStrKeyword(String strKeyword) {
         this.strKeyword = strKeyword;
+    }
+
+    public Post getPostaus() {
+        return postaus;
+    }
+
+    public void setPostaus(Post postaus) {
+        this.postaus = postaus;
     }
 
     @Override
