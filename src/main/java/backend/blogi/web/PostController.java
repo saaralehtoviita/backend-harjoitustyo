@@ -28,8 +28,6 @@ public class PostController {
     public String postList(Model model) {
         model.addAttribute("postaukset", pRepository.findAll());
         return "postlist";
-    }
-
-    
+    }  
 
 }

@@ -22,7 +22,7 @@ import jakarta.validation.constraints.Size;
 
 
 @Entity
-@Table(name = "postaukset") //yhteinäisyyden säilymiseksi vaihdetaan taulut suomenkieliksi
+@Table(name = "Posts")
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -43,7 +43,7 @@ public class Post {
     //tietokannassa userId post-taulun fk:na
     @ManyToOne
     @JoinColumn(name = "userId")
-    private User kirjoittaja;
+    private BlogUser kirjoittaja;
 
     //yhdellä postauksella voi olla monta avainsanaa
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "postaus")
@@ -63,7 +63,7 @@ public class Post {
     }
 
     //konstruktori kirjoittajalla
-    public Post(String title, String text, String postDate, User kirjoittaja) {
+    public Post(String title, String text, String postDate, BlogUser kirjoittaja) {
         this.title = title;
         this.text = text;
         this.postDate = postDate;
@@ -72,7 +72,7 @@ public class Post {
 
 
     //kosntruktori kirjoittajan ja kwywordsien kanssa
-        public Post(String title, String text, String postDate, User kirjoittaja, List<Keyword> keywords ) {
+        public Post(String title, String text, String postDate, BlogUser kirjoittaja, List<Keyword> keywords ) {
         this.title = title;
         this.text = text;
         this.postDate = postDate;
@@ -113,11 +113,11 @@ public class Post {
             this.postDate = postDate;
         }
 
-        public User getKirjoittaja() {
+        public BlogUser getKirjoittaja() {
             return kirjoittaja;
         }
 
-        public void setKirjoittaja(User kirjoittaja) {
+        public void setKirjoittaja(BlogUser kirjoittaja) {
             this.kirjoittaja = kirjoittaja;
         }
 

@@ -12,7 +12,7 @@ import backend.blogi.domain.KeywordRepository;
 import backend.blogi.domain.Keyword;
 import backend.blogi.domain.Post;
 import backend.blogi.domain.PostRepository;
-import backend.blogi.domain.User;
+import backend.blogi.domain.BlogUser;
 import backend.blogi.domain.UserRepository;
 
 @SpringBootApplication
@@ -36,9 +36,9 @@ public class BlogiApplication {
 
 			//luodaan käyttäjiä
 
-			User u1 = uRepository.save(new User("Elli", "Esimerkki", "ellinen", "e.e@gmail.com"));
-			User u2 = uRepository.save(new User("Ensio", "Esimerkki", "ensio", "e2.e@gmail.com"));
-			User u3 = uRepository.save(new User("Koodi", "Koodaaja", "koodinen", "k.k@gmail.com"));
+			BlogUser u1 = uRepository.save(new BlogUser("Elli", "Esimerkki", "ellinen", "e.e@gmail.com"));
+			BlogUser u2 = uRepository.save(new BlogUser("Ensio", "Esimerkki", "ensio", "e2.e@gmail.com"));
+			BlogUser u3 = uRepository.save(new BlogUser("Koodi", "Koodaaja", "koodinen", "k.k@gmail.com"));
 
 			//luodaan postauksia
 			//rakenne muuttuu jos many to many rakenne toteutuu postausten ja avainsanojen välillä
