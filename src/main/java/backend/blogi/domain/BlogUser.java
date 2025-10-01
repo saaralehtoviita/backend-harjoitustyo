@@ -16,8 +16,8 @@ import jakarta.persistence.Table;
 //@Id + @GeneratedValue annotaatioiden avulla tietokanta generoi automaattiset id-arvot eikä niitä siksi konstruktoreissa käytetä
 
 @Entity
-@Table(name ="kayttajat") //hibernate ei voi luoda user-taulua
-public class User {
+@Table(name ="Users")
+public class BlogUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -40,11 +40,11 @@ public class User {
     @JsonIgnore
     private List<Post> postaukset;
 
-    public User () {
+    public BlogUser () {
 
     }
 
-    public User(String firstName, String lastName, String userName, String email) {
+    public BlogUser(String firstName, String lastName, String userName, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;
