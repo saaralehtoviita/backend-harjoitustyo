@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${post.title}">Postaus</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <!--Yksittäisen postauksen sivu, sisältö vaihtuu postauksen id:n perusteella-->
+</head>
+<body class="container mt-4">
+    <h1 th:text="${post.title}"></h1>
+    <p><strong>Päivämäärä:</strong> <span th:text="${post.postDate}"></span></p>
+    <hr>
+    <p th:text="${post.text}"></p>
+
+    <h4>Avainsanat:</h4>
+    <ul>
+        <li th:each="keyword : ${post.keywords}" th:text="${keyword.strKeyword}"></li>
+    </ul>
+
+    <a href="/postlist" class="btn btn-secondary mt-3">Takaisin listaukseen</a>
+</body>
+</html>

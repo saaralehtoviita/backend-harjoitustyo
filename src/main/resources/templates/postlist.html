@@ -14,7 +14,7 @@ Tälle sivulle tulee listaus postausten otsikoista, otsikot muutetaan linkeiksi/
 josta pääsee lukemaan koko postauksen
 taulukon otsikot tulevat olemaan: Otsikko, Päivämäärä, Avainsanat/aiheet
 Tälle sivulle tulee myös hakutoiminto, haun perusteella voi hakea postauksia avainsanojen, otsikon, tai päivämäärän perusteella-->
-<body>
+<body class="ml-4 mt-4">
     <h1>Kaikkien blogipostausten otsikot</h1>
     <h3>Otsikkoa klikkaamalla pääset lukemaan koko postauksen!</h3>
     <table class="table table-striped">
@@ -25,10 +25,9 @@ Tälle sivulle tulee myös hakutoiminto, haun perusteella voi hakea postauksia a
             <th>Avainsanat</th>
         </tr>
         <!--Postausten tiedot-->
-        <tr th:each = "postaus : ${postaukset}">
-            <td>
-            <a th:text="${postaus.title}"></a> <!--tästä linkki-->
-            </td>
+                <tr th:each = "postaus : ${postaukset}">
+                <td><a th:text="${postaus.title}" th:href="@{/post/{id}(id=${postaus.postId})}"></a>
+                </td>
             <td th:text="${postaus.postDate}"></td>
             <td>
                 <ul id="list-keyword">
@@ -36,7 +35,6 @@ Tälle sivulle tulee myös hakutoiminto, haun perusteella voi hakea postauksia a
                 </ul>
             </td>
         </tr>
-    </table>
-   
+    </table>  
 </body>
 </html>

@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -54,6 +55,14 @@ public class PostController {
         }
         pRepository.save(post);
         return "redirect:postlist";
+    }
+
+    //yksittäisen postauksen näyttäminen, sisältö vaihtuu postauksen id:n mukaan
+    @GetMapping("/post/{id}")
+    public String showPost(@PathVariable Long id, Model model) {
+        Post postaus = pRepository.findById(id).orElse(null);
+        model.addAttribute("post", postaus);
+        return "post";
     }
 
 

@@ -43,7 +43,9 @@ public class BlogiApplication {
 			//luodaan postauksia
 			//rakenne muuttuu jos many to many rakenne toteutuu postausten ja avainsanojen välillä
 
-			Post post1 = new Post("Urheiluvammat", "Blogipostaustekstiä", "23.9.2025", u1);
+			Post post1 = new Post("Urheiluvammat", 
+			"Blogipostaustekstiä 1: ", 
+			"23.9.2025", u1);
 			pRepository.save(post1);
 			injury.setPostaus(post1);
 			crossfit.setPostaus(post1);
