@@ -1,5 +1,9 @@
 package backend.blogi.web;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -10,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import backend.blogi.domain.Keyword;
+import backend.blogi.domain.KeywordRepository;
 import backend.blogi.domain.Post;
 import backend.blogi.domain.PostRepository;
 import jakarta.validation.Valid;
@@ -20,9 +26,11 @@ public class PostController {
     //PostRepository rajapinnan injektointi
     //voisi myös käyttää @Autowired annotaatiota mutta ilmeisesti ei olekaan pakollinen?
     private PostRepository pRepository;
+    private KeywordRepository kRepository;
 
-    public PostController(PostRepository pRepository) {
+    public PostController(PostRepository pRepository, KeywordRepository kRepository) {
         this.pRepository = pRepository;
+        this.kRepository = kRepository;
     }
 
     @ResponseBody
@@ -44,6 +52,7 @@ public class PostController {
     @RequestMapping("/addPost")
     public String addPost(Model model) {
         model.addAttribute("post", new Post());
+        model.addAttribute("keywords", kRepository.findAll());
         return "addPost";
     }
 
@@ -53,8 +62,33 @@ public class PostController {
         if (bindingResult.hasErrors()) {
             return "addPost";
         }
+        //jos postauksella on keywordseja, tarkistetaan löytyykö niitä jo reposta
+        //jos ei löydy, tallennetaan ne repoon
+        //jos löytyy, tallennetaan ne suoraan postaukselle
+        //jokatapauksessa, mahdollista keywordseista tehdään lista 
+        if (post.getKeywords() != null) {
+            Set<Keyword> newKwords = new HashSet<>();
+            for (Keyword k : post.getKeywords()) {
+                kRepository.findByStrKeyword(k.getStrKeyword())
+                .ifPresentOrElse(
+                    keywordFound -> {
+                        newKwords.add(keywordFound);                
+                    },
+                    () -> {
+                        Keyword newKeyword = new Keyword(k.getStrKeyword());
+                        Keyword savedKeyword = kRepository.save(newKeyword);
+                        newKwords.add(savedKeyword);
+                    }
+                );
+        //postauksen tekstin muotoilu
+        // * * sana * * -> bold 
+        //rivinvaihto (enterin painallus) tekstiä kirjoitettaessa korvataan <br> tagilla
+        String fText = post.getText()
+        .replaceAll("\\*\\*(.*?)\\*\\*", "<strong>$1</strong>")
+        .replaceAll("\n", "<br>");
+        post.setText(fText);
         pRepository.save(post);
-        return "redirect:postlist";
+        return "redirect:/postlist";
     }
 
     //yksittäisen postauksen näyttäminen, sisältö vaihtuu postauksen id:n mukaan
@@ -64,6 +98,4 @@ public class PostController {
         model.addAttribute("post", postaus);
         return "post";
     }
-
-
 }

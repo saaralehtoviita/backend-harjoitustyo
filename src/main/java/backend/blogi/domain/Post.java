@@ -1,18 +1,20 @@
 package backend.blogi.domain;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
@@ -22,7 +24,7 @@ import jakarta.validation.constraints.Size;
 
 
 @Entity
-@Table(name = "Posts")
+@Table(name = "POSTS")
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -33,7 +35,7 @@ public class Post {
     private String title;
 
     @NotEmpty(message = "Text field cannot be empty")
-    @Size(min= 1)
+    @Size(min= 1, max= 1000)
     private String text;
 
     private String postDate;
@@ -46,9 +48,16 @@ public class Post {
     private BlogUser kirjoittaja;
 
     //yhdellä postauksella voi olla monta avainsanaa
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postaus")
+    //@OneToMany(cascade = CascadeType.ALL, mappedBy = "postaus")
+    @ManyToMany
+    @JoinTable(name = "POST_KEYWORDS",
+    joinColumns = @JoinColumn(name = "post_id"),
+    inverseJoinColumns = @JoinColumn(name = "keyword_id")    
+    )
+    
+
     @JsonIgnore
-    private List<Keyword> keywords;//tämä rakenne muuuttunee, jos opin tekemään manytomany suhteen
+    private Set<Keyword> keywords;//tämä rakenne muuuttunee, jos opin tekemään manytomany suhteen
 
     //konstruktori ilman paramametrejä
     public Post() {
@@ -72,7 +81,7 @@ public class Post {
 
 
     //kosntruktori kirjoittajan ja kwywordsien kanssa
-        public Post(String title, String text, String postDate, BlogUser kirjoittaja, List<Keyword> keywords ) {
+        public Post(String title, String text, String postDate, BlogUser kirjoittaja, Set<Keyword> keywords ) {
         this.title = title;
         this.text = text;
         this.postDate = postDate;
@@ -121,15 +130,15 @@ public class Post {
             this.kirjoittaja = kirjoittaja;
         }
 
-        public List<Keyword> getKeywords() {
+        public Set<Keyword> getKeywords() {
             return keywords;
         }
 
-        public void setKeywords(List<Keyword> keywords) {
+        public void setKeywords(Set<Keyword> keywords) {
             if (keywords != null) {
                 this.keywords = keywords;
             } else {
-                this.keywords = new ArrayList<>();
+                this.keywords = new HashSet<>();
             }
             }
 

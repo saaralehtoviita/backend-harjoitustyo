@@ -12,7 +12,7 @@ Käyttäjä kirjoittaa ja tallentaa tällä sivulla uusia postauksia-->
 <body class="ml-4">
     <h1>New Blogpost</h1>
     <p>Please, write your post in the form below.</p>
-    <form th:object="${post}" th:action="@{savePost}" action="#" method="post">
+    <form th:object="${post}" th:action="@{/savePost}" action="#" method="post">
         <div class="mb-3">
             <label for="title">Title of Post</label>
                 <input type="text" id="title" th:field="*{title}" />
@@ -20,13 +20,14 @@ Käyttäjä kirjoittaa ja tallentaa tällä sivulla uusia postauksia-->
         </div>
         <div class="mb-3">
             <label for="text">Content</label>
-                <input type="text" id="text" th:field="*{text}" />
+                <textarea id="text" th:field="*{text}" class="form-control w-75" rows="15"></textarea>
                     <div th:if="${#fields.hasErrors('text')}" th:errors="*{text}" class="text-danger">Error</div>
         </div>
-        <div class="mb-3">
+<!--         <div class="mb-3">
             <label for="title">Keywords</label>
                 <input type="text" id="keywords" th:field="*{keywords}" />
-        </div>
+        </div> -->
+        <input type="submit" value="Save" class="btn btn-success"></input>
         <!--Lomakkeeseen ei tarvitse täydentää postauksen kirjoittajan tietoja, ne täydentyvät automaattisesti sisäänkirjautuneen käyttäjän tiedoista-->
     </form>
 </body>

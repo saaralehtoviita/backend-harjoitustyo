@@ -1,11 +1,17 @@
 package backend.blogi.domain;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 //entiteettiluokka; @Entity annotaation avulla luodaan olio automaattisesti tietokantaan
@@ -15,7 +21,7 @@ import jakarta.persistence.Table;
 //tämä luokka tulee siis mahdollisesti olemaan manyToMany luokka
 
 @Entity
-@Table(name = "avainsanat") //yhteinäisyyden säilymiseksi vaihdetaan taulut suomenkieliksi
+@Table(name = "KEYWORDS") //yhteinäisyyden säilymiseksi vaihdetaan taulut suomenkieliksi
 public class Keyword {
 
     @Id
@@ -24,9 +30,14 @@ public class Keyword {
 
     private String strKeyword;
 
-    @ManyToOne
-    @JoinColumn(name = "postId")
-    private Post postaus;
+    @ManyToMany(mappedBy = "keywords", fetch = FetchType.LAZY) //mappedBy täytyy olla saman, kun parentluokan (post), eli keywords lista
+    @JsonIgnore
+    private Set<Post> posts = new HashSet<>();
+
+
+    //@ManyToOne
+    //@JoinColumn(name = "postId")
+    //private Post postaus;
 
     public Keyword () {
 
@@ -34,6 +45,14 @@ public class Keyword {
 
     public Keyword(String strKeyword) {
         this.strKeyword = strKeyword;
+    }
+
+    
+
+    public Keyword(Long keywordId, String strKeyword, Set<Post> posts) {
+        this.keywordId = keywordId;
+        this.strKeyword = strKeyword;
+        this.posts = posts;
     }
 
     public Long getKeywordId() {
@@ -52,29 +71,29 @@ public class Keyword {
         this.strKeyword = strKeyword;
     }
 
-    public Post getPostaus() {
+/*     public Post getPostaus() {
         return postaus;
     }
 
     public void setPostaus(Post postaus) {
         this.postaus = postaus;
-    }
+    } */
 
     @Override
     public String toString() {
         return "Keyword [keywordId=" + keywordId + ", strKeyword=" + strKeyword + "]";
     }
 
+    @Override
+    public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof Keyword)) return false;
+    return strKeyword != null && strKeyword.equals(((Keyword) o).getStrKeyword());
+}
 
-
-    
-
-
-
-
-
-
-
-    
+    @Override
+    public int hashCode() {
+    return strKeyword != null ? strKeyword.hashCode() : 0;
+    }
 
 }

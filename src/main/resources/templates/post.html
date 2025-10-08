@@ -10,7 +10,7 @@
     <h1 th:text="${post.title}"></h1>
     <p><strong>Päivämäärä:</strong> <span th:text="${post.postDate}"></span></p>
     <hr>
-    <p th:text="${post.text}"></p>
+    <p th:utext="${post.text}"></p>
 
     <h4>Avainsanat:</h4>
     <ul>

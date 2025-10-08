@@ -3,7 +3,8 @@ package backend.blogi;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -34,6 +35,12 @@ public class BlogiApplication {
 			Keyword ankle = new Keyword("ankle");
 			Keyword injury = new Keyword("injury");
 
+			kRepository.save(crossfit);
+			kRepository.save(injury);
+			kRepository.save(ankle);
+			kRepository.save(shoulder);
+			kRepository.save(knee);		
+
 			//luodaan käyttäjiä
 
 			BlogUser u1 = uRepository.save(new BlogUser("Elli", "Esimerkki", "ellinen", "e.e@gmail.com"));
@@ -43,28 +50,29 @@ public class BlogiApplication {
 			//luodaan postauksia
 			//rakenne muuttuu jos many to many rakenne toteutuu postausten ja avainsanojen välillä
 
-			Post post1 = new Post("Urheiluvammat", 
-			"Blogipostaustekstiä 1: ", 
-			"23.9.2025", u1);
+			//luodaan ekan postauksen keywordslista ja tallennetaan postaukselle tiedot
+			Set<Keyword> keywords_post1 = new HashSet<>();
+			keywords_post1.add(crossfit);
+			keywords_post1.add(injury);
+			Post post1 = new Post("Urheiluvammat", "Blogipostaustekstiä 1: ", "23.9.2025", u1, keywords_post1);
 			pRepository.save(post1);
-			injury.setPostaus(post1);
-			crossfit.setPostaus(post1);
+			//injury.setPostaus(post1);
+			//crossfit.setPostaus(post1);
 
-			Post post2 = new Post("Olkapään kuntoutus", "Blogipostaustekstiä 2", "24.9.2025", u1);
+			Set<Keyword> keywords_post2 = new HashSet<>();
+			keywords_post2.add(shoulder);
+			keywords_post2.add(injury);
+			Post post2 = new Post("Olkapään kuntoutus", "Blogipostaustekstiä 2", "24.9.2025", u1, keywords_post2);
 			pRepository.save(post2);
-			shoulder.setPostaus(post2);
-			injury.setPostaus(post2);
+			//shoulder.setPostaus(post2);
+			//injury.setPostaus(post2);
 
-			Post post3 = new Post("Nilkan kuntoutus", "Blogipostaustekstiä 3", "20.9.2025", u2);
+			Set<Keyword> keywords_post3 = new HashSet<>();
+			keywords_post3.add(ankle);
+			keywords_post3.add(injury);
+			Post post3 = new Post("Nilkan kuntoutus", "Blogipostaustekstiä 3", "20.9.2025", u2, keywords_post3);
 			pRepository.save(post3);
-			ankle.setPostaus(post3);
-
-			kRepository.save(crossfit);
-			kRepository.save(injury);
-			kRepository.save(ankle);
-			kRepository.save(shoulder);
-			kRepository.save(knee);
-						
+			//ankle.setPostaus(post3);				
 		};
 	}
 
